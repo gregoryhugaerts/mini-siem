@@ -1,0 +1,23 @@
+import json
+from pathlib import Path
+from datetime import datetime
+import requests
+
+current_directory = Path(__file__).parent.resolve()
+sample = current_directory.parent.parent / "samples/suricata_alerts.json"
+with sample.open(encoding="UTF-8") as source:
+    alerts = json.load(source)
+
+events = []
+
+for alert in alerts:
+    event = {
+        'timestamp': alert["timestamp"],
+        'source': 1,
+        'data': alert
+    }
+    events.append(event)
+
+sources = requests.get("http://localhost:8000/sources").json()
+response = requests.post("http://localhost:8000/events", json=events)
+print(response.json())
