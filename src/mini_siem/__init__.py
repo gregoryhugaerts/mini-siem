@@ -127,7 +127,7 @@ def search_events(
     query: str,
     session: Session = Depends(get_session),
 ):
-    from .parser import generate_event_sql_query, parser
+    from parser import generate_event_sql_query, parser
 
     tree = parser.parse(query)
     sql_query = generate_event_sql_query(tree)
